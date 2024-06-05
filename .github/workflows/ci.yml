@@ -1,9 +1,6 @@
 name: Production Workflow (@loopdive/jsmediatags)
 
-on:
-  push:
-    tags:
-      - v[0-9]+.[0-9]+.[0-9]+
+on: push
 
 jobs:
   build:
