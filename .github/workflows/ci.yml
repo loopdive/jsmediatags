@@ -1,0 +1,41 @@
+name: Production Workflow (@loopdive/jsmediatags)
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.2
+      - name: Set Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@loopdive"
+          always-auth: true
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          GITHUB_REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Build production bundle
+        run: pnpm run dist
+      - name: Build production bundle
+        run: pnpm run build
+      - name: Publish to Github package repository
+        run: pnpm publish --no-git-checks
+        env:
+          GITHUB_REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}

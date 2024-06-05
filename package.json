@@ -1,5 +1,5 @@
 {
-  "name": "jsmediatags",
+  "name": "@loopdive/jsmediatags",
   "version": "3.9.7",
   "description": "Media Tags Reader (ID3, MP4)",
   "author": {
